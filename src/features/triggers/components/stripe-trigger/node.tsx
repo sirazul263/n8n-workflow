@@ -1,21 +1,19 @@
 import { NodeProps } from "@xyflow/react";
 import { memo, useState } from "react";
 import { BaseTriggerNode } from "../base-trigger-node";
-import { MousePointerIcon } from "lucide-react";
-import { ManualTriggerDialog } from "./dialog";
-
-import { MANUAL_TRIGGER_CHANNEL_NAME } from "@/inngest/channels/manual-trigger";
-import { fetchManualTriggerRealtimeToken } from "./actions";
+import { StripeTriggerDialog } from "./dialog";
 import { useNodeStatus } from "@/hooks/use-node-status";
+import { fetchStripeTriggerRealtimeToken } from "./actions";
+import { STRIPE_TRIGGER_CHANNEL_NAME } from "@/inngest/channels/stripe-trigger";
 
-export const ManualTriggerNode = memo((props: NodeProps) => {
+export const StripeTriggerNode = memo((props: NodeProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const nodeStatus = useNodeStatus({
     nodeId: props.id,
-    channel: MANUAL_TRIGGER_CHANNEL_NAME,
+    channel: STRIPE_TRIGGER_CHANNEL_NAME,
     topic: "status",
-    refreshToken: fetchManualTriggerRealtimeToken,
+    refreshToken: fetchStripeTriggerRealtimeToken,
   });
 
   const handleOpenSettings = () => {
@@ -25,13 +23,14 @@ export const ManualTriggerNode = memo((props: NodeProps) => {
     <>
       <BaseTriggerNode
         {...props}
-        icon={MousePointerIcon}
-        name={"When clicking 'Execute Workflow'"}
+        icon="/logos/stripe.svg"
+        name="Stripe"
+        description={"When stripe event is captured"}
         status={nodeStatus}
         onSettings={handleOpenSettings}
         onDoubleClick={handleOpenSettings}
       />
-      <ManualTriggerDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <StripeTriggerDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </>
   );
 });
